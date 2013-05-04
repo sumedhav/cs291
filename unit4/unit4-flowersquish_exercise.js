@@ -31,7 +31,7 @@ function fillScene() {
 	scene.add(light2);
 
 	if (ground) {
-		Coordinates.drawGround({size:10000});		
+		Coordinates.drawGround({size:10000});       
 	}
 	if (gridX) {
 		Coordinates.drawGrid({size:10000,scale:0.01});
@@ -40,7 +40,7 @@ function fillScene() {
 		Coordinates.drawGrid({size:10000,scale:0.01, orientation:"y"});
 	}
 	if (gridZ) {
-		Coordinates.drawGrid({size:10000,scale:0.01, orientation:"z"});	
+		Coordinates.drawGrid({size:10000,scale:0.01, orientation:"z"}); 
 	}
 	if (axes) {
 		Coordinates.drawAllAxes({axisLength:200,axisRadius:1,axisTess:50});
@@ -59,24 +59,32 @@ function fillScene() {
 	/////////
 	// student: add code here to make 24 petals, radiating around the sphere.
 	// Scales, rotates, and positions on the cylinder and petals are needed.
-	var cylinder = new THREE.Mesh( cylGeom, petalMaterial );
-	var petal = new THREE.Object3D();
-	petal.add( cylinder );
-
-	flower.add( petal );
+	var halfPetalLength = petalLength/2;
+	for (var roty = 0; roty < 360; roty += 15 ) {
+		var cylinder = new THREE.Mesh( cylGeom, petalMaterial );
+		cylinder.position.y = halfPetalLength;
+		cylinder.scale.x = 1/4;
+		var petal = new THREE.Object3D();
+		petal.add( cylinder );
+		petal.rotation.z = 70 * Math.PI/180;
+		petal.rotation.y = roty * Math.PI/180;
+		petal.position.y = flowerHeight;
+		flower.add( petal );
+	}
+	
 	
 	/////////
 	
 	var stamenMaterial = new THREE.MeshLambertMaterial( { color: 0x333310 } );
 	var stamen = new THREE.Mesh( 
 		new THREE.SphereGeometry( 20, 32, 16 ), stamenMaterial );
-	stamen.position.y = flowerHeight;	// move to flower center
+	stamen.position.y = flowerHeight;   // move to flower center
 	flower.add( stamen );
 
 	var stemMaterial = new THREE.MeshLambertMaterial( { color: 0x339424 } );
 	var stem = new THREE.Mesh( 
 		new THREE.CylinderGeometry( 10, 10, flowerHeight, 32 ), stemMaterial );
-	stem.position.y = flowerHeight/2;	// move from ground to stamen
+	stem.position.y = flowerHeight/2;   // move from ground to stamen
 	flower.add( stem );
 
 	scene.add( flower );
